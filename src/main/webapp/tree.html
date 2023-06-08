@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jstree basic demos</title>
+	<style>
+	html { margin:0; padding:0; font-size:62.5%; }
+	body { max-width:800px; min-width:300px; margin:0 auto; padding:20px 10px; font-size:14px; font-size:1.4em; }
+	h1 { font-size:1.8em; }
+	.demo { overflow:auto; border:1px solid silver; min-height:100px; }
+	</style>
+	<link rel="stylesheet" href="frontend/dist/themes/default/style.min.css" />
+</head>
+<body>
+	
+
+	
+
+	<!--<h1>OPC UA Tree</h1>-->
+	
+	<!--<div id="evts" class="demo"></div>-->
+	<div id="jstree"></div>
+	<script src="frontend/dist/jquery.min.js"></script>
+	<script src="frontend/dist/jstree.min.js"></script>
+	
+	<script>
+	
+	function getUrlVars() {
+	    var vars = {};
+	    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+	        vars[key] = value;
+	    });
+	    return vars;
+	}
+
+			function getUrlParam(parameter, defaultvalue){
+	    var urlparameter = defaultvalue;
+	    if(window.location.href.indexOf(parameter) > -1){
+	        urlparameter = getUrlVars()[parameter];
+	        }
+	    return urlparameter;
+	}
+
+		
+	//alert("hi2");12-3-2020
+		var endpoint=getUrlParam('url','Empty');
+		//alert(endpoint);
+	
+$(function() {
+
+	// alert(endpoint);
+	 $.ajax({url: "browsetagopc",
+		 data:"url="+endpoint,
+	 success: function(result){
+	    	 dat=result;
+	    	 //alert(dat);
+
+  $("#jstree").jstree({
+    "core": {
+      "check_callback": true,
+      "data": eval(dat)
+    },
+    'types': {
+        'Object': {
+            'icon':  'tag/OPCUA/Object.ico'
+        },
+        'View': {
+            'icon': 'tag/OPCUA/View.ico'
+        },
+        'Variable': {
+            'icon':  'tag/OPCUA/Variable.ico'
+        },
+        'Method': {
+            'icon':  'tag/OPCUA/Method.ico'
+        }
+},
+'contextmenu':{
+	'items':customMenu			                	
+},
+'plugins': ['contextmenu','unique','types','state']
+  }).on('changed.jstree', function(e, data) {
+    //console.log('saved');
+	 var selectedNode= $('#jstree').jstree(true).get_selected(true);
+         var main_id=selectedNode[0].original.id;
+         var name=selectedNode[0].original.text;
+         var node_id=selectedNode[0].original.nodeId;
+		 //alert(name);
+		 /*	$.ajax({
+	   		type: 'get',
+	   		url: "browseSubnode" ,
+	   		data:{
+	   			uurl:endpoint,
+	   			mainid: main_id,
+	   			nodeid:node_id
+		        	 },// Data fetch 
+	   		success: function(res1){
+							//alert(res1);
+							var i;
+							//var t=res1;
+							var idd,textt,jsonObj2,nn,mm,type,node_id1,pp,nodeclass,nodename;
+							
+							var str = res1.replace(/\n/g, ",");
+							//alert(JSON.parse(str));
+								//alert("str::"+str);
+							var aar=JSON.parse(str);
+							
+							for(i=0;i<eval(aar).length;i++)
+								 {
+											
+											jsonObj2 = JSON.parse(JSON.stringify(aar[i]));
+											 idd=jsonObj2.id;
+											 textt=jsonObj2.text;
+											 type=jsonObj2.type;
+											 node_id1=jsonObj2.nodeId;
+											 pp=jsonObj2.parent;
+											 nodeclass:jsonObj2.nodeClass;
+											 nodename:jsonObj2.name;
+											
+											
+											  $('#jstree').jstree().create_node(main_id, {
+												  	"id":idd,
+												  	"name":nodename,
+													"text":textt,
+													"nodeId":node_id1,
+													"nodeClass":nodeclass,
+													"type":type,
+													"parent":pp
+											  
+											  
+											  
+											  }); // create node 
+											 
+									 } // for loop responce 
+								
+								
+							
+								
+						} // subnode fetch success
+					}); // Subnode fetch ajax*/
+
+}); // onChanged event click node fetch
+
+  
+	 } // root ajax success
+	 
+	 }); // Ajax First Root fetch
+	 
+	 
+	 function customMenu(node){ 
+			var items={ 
+			      "Subscribe": { 
+		            "label": "Subscribe", 
+		            "action": function (e, data) { 
+		    			var selectedNode= $('#jstree').jstree(true).get_selected(true); 
+		 				var nodeid=selectedNode[0].original.nodeId; 
+		 				var nodeidname=selectedNode[0].original.text; 
+		    				//alert("hi");12-3-2020
+		    			
+		    							 $.ajax({
+											 type:'get',
+											 url:'subscribeNode',
+											 data:'id='+selectedNode[0].original.id+'&name='+nodeid+'&url='+endpoint,
+						 					 success:function(response){}}); 
+		    					} 
+		    
+		            }, 
+		                        "Unsubscribe": { 
+		                            "label": "Unsubscribe", 
+		                            "action": function (e, data) { 
+//		                                   alert('Node Unsubscribed !'); 
+		                     				var selectedNode1= $('#data2').jstree(true).get_selected(true); 
+		                 				var nodeid1=selectedNode1[0].original.id; 
+		                 				var nodeidname1=selectedNode1[0].original.text; 
+		                 				var valu='NO'; 
+		                 				//alert(nodeid1);12-3-2020
+			 			     								$.ajax({
+		            										 		type:'get',
+		            										 		url:'unsubscribeNode',
+		            										 		data:'id='+nodeid1+'&url='+endpoint,
+		             				 					 		success:function(response){
+				 															alert('Unsubscribe.......!');
+				
+		             											}
+		             				 					 		
+		         			 								}); 
+				
+		                            } 
+		                        }         } 
+			if(node.type != "Variable") { 
+				items.Subscribe._disabled = true; 
+				items.Unubscribe._disabled = true; 
+				items.Startnode._disabled = true; 
+			} 
+			return items; 
+		}	
+
+}); //  Main Funaction
+
+
+	</script>
+</body>
+</html>

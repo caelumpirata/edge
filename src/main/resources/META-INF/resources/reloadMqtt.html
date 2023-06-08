@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+	<title>jstree basic demos</title>
+	<style>
+	html { margin:0; padding:0; font-size:62.5%; }
+	body { margin:0 auto; padding:5px 5px; font-size:14px; font-size:1.4em; }
+	h1 { font-size:1.8em; }
+	table {
+		border-collapse: collapse;
+		width: 100%;
+		
+	}
+	
+	th {
+		padding:8px;
+		font-weight:bolder;
+		text-align:left;
+		border-bottom: 1px soild #ddd;
+		background-color: #4CAF50;
+  color: white;
+	}
+	td{
+	
+		padding:8px;
+		text-align:left;
+		border-bottom: 1px soild #ddd;
+	}
+	tr:nth-child(even) {background-color: #f2f2f2;}
+th, td {
+  border : 3px solid #ddd;
+  
+}
+
+	tr:hover{
+		background-color: #f5f5f5;
+	}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	
+</head>
+<body>
+	<div id="data2"/>
+	<div>
+	<table>
+		<TH>
+			<TD>Sever URL</TD>
+			<TD>Source Name</TD>
+			<TD>Topic Name</TD>
+			<TD>Value</TD>
+			<TD>Srctime</TD>
+		</TH>
+	</table>
+	</div>
+	<script type="text/javascript">
+	/*<![CDATA[*/
+		var dat;
+		function fatchdata() {
+			//alert("hi");
+		    $.getJSON('mqttLiveReload',
+		    function (json) {
+		    	//json=eval(json);
+		    //	alert(json['url']);
+		    	$('table').empty(); 
+		    	var tr;
+		    	tr = $('<tr id="t"/>');
+	            tr.append("<TD>Sever URL</TD>");
+	            //tr.append("<TD>Source ID</TD>");
+	            tr.append("<TD>Source Name</TD>");
+	            tr.append("<TD>Topic Name</TD>");
+	            tr.append("<td>value</td>");
+	          //  tr.append("<td>Status</td>");
+	            tr.append("<td>Srctime</td>");
+	            $('table').append(tr);
+		        //for(var i=0;i<json.length;i++){
+			
+					//alert(json[i].endpoint);
+		            tr = $('<tr id="tr1"/>');
+		            tr.append("<td>" + json['broker'] + "</td>");
+		           // tr.append("<td>" + json['src_id'] + "</td>");
+		            tr.append("<td>" + json['src_name'] + "</td>");
+		            tr.append("<td>" + json['tp'] + "</td>");
+		            tr.append("<td>" + json['topic_value'] + "</td>");
+		         //   tr.append("<td>" + json['st'] + "</td>");
+		            tr.append("<td>" + json['dt'] + "</td>");
+		            $('table').append(tr);
+		        
+		        //}
+		    });
+		}
+		$(document).ready( function (){setInterval(fatchdata,5000);});
+		//$(document).ready( function (){fatchdata();});
+			
+	
+	/*]]>*/
+	</script>
+</body>
+
+</html>

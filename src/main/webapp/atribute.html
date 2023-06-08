@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+	<title>jstree basic demos</title>
+	<style>
+		html { margin:0; padding:0; font-size:62.5%; }
+	body { margin:0 auto; padding:5px 5px; font-size:14px; font-size:1.4em; }
+	h1 { font-size:1.8em; }
+	table {
+		border-collapse: collapse;
+		width: 100%;
+		
+	}
+	
+	th {
+		padding:8px;
+		font-weight:bolder;
+		text-align:left;
+		border-bottom: 1px soild #ddd;
+		background-color: #4CAF50;
+  color: white;
+	}
+	td{
+	
+		padding:8px;
+		text-align:left;
+		border-bottom: 1px soild #ddd;
+	}
+	tr:nth-child(even) {background-color: #f2f2f2;}
+th, td {
+  border : 3px solid #ddd;
+  
+}
+
+	tr:hover{
+		background-color: #f5f5f5;
+	}
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	
+</head>
+<body>
+	<div id="data2"/>
+	<div>
+	<table>
+		
+	</table>
+	</div>
+	<script type="text/javascript">
+	/*<![CDATA[*/
+				function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
+
+		function getUrlParam(parameter, defaultvalue){
+    var urlparameter = defaultvalue;
+    if(window.location.href.indexOf(parameter) > -1){
+        urlparameter = getUrlVars()[parameter];
+        }
+    return urlparameter;
+}
+
+	
+//alert("hi2");12-3-2020
+	
+
+		//alert(id+"  :  "+endpoint);//12-3-2020
+		
+		var dat;
+		function fatchdata() {
+			var id=getUrlParam('id','Empty');
+			var endpoint=getUrlParam('url','Empty');
+			//alert("hi");
+		    	//json=eval(json);
+		    	$.getJSON('singleSelect?id='+id+'&url='+endpoint,
+		    function (json) {
+		    
+		    	$('table').empty(); 
+		    	var tr;
+		    	 tr = $('<tr />');
+
+		            tr = $('<tr/>');
+		            tr.append("<td>Sever URL</td>");
+		     		tr.append("<td>" + json[0].endpoint + "</td>");
+		            $('table').append(tr);
+		         
+		            tr = $('<tr />');
+
+		            tr.append("<td>Node ID</td>");
+		            tr.append("<td>" + json[0].id + "</td>");
+		            $('table').append(tr);
+		            tr = $('<tr />');
+		            
+		            tr.append("<td>Node Name</td>");
+		            tr.append("<td>" + json[0].name + "</td>");
+		            $('table').append(tr);
+		            tr = $('<tr />');
+		            
+		            tr.append("<td>Value</td>");
+		            tr.append("<td>" + json[0].value + "</td>");
+		            $('table').append(tr);
+		            tr = $('<tr />');
+		            
+		            tr.append("<td>Datatype</td>");
+		            tr.append("<td>" + json[0].datatype + "</td>");
+		            $('table').append(tr);
+		            tr = $('<tr />');
+
+		            tr.append("<td>Status</td>");
+		            tr.append("<td>" + json[0].status + "</td>");
+		            $('table').append(tr);
+		            tr = $('<tr />');
+		            
+		            tr.append("<td>Srctime</td>");
+		            tr.append("<td>" + json[0].srctime + "</td>");
+		            $('table').append(tr);
+		            tr = $('<tr />');
+		            
+		         /*   tr.append("<td>Display Name</td>");
+		            tr.append("<td>" + json[0].displayName + "</td>");
+		            $('table').append(tr);
+		            tr = $('<tr />');
+		            
+		            tr.append("<td>Browse Name</td>");
+		            tr.append("<td>" + json[0].browseName + "</td>");
+		            $('table').append(tr);
+		            tr = $('<tr />');
+		        
+		            tr.append("<td>User Access Level</td>");
+		            tr.append("<td>" + json[0].userAccess + "</td>");
+		            $('table').append(tr);
+		            tr = $('<tr />');
+		            
+		            tr.append("<td>Node Class</td>");
+		            tr.append("<td>" + json[0].nodeClass + "</td>");
+		            $('table').append(tr);*/
+		    	});    
+		    
+		}
+		$(document).ready(fatchdata);
+			
+	
+	/*]]>*/
+	</script>
+</body>
+
+</html>

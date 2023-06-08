@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Information Model</title>
+	<style>
+	html { margin:0; padding:0; font-size:62.5%; }
+	body { max-width:800px; min-width:300px; margin:0 auto; padding:20px 10px; font-size:14px; font-size:1.4em; }
+	h1 { font-size:1.8em; }
+	.demo { overflow:auto; border:1px solid silver; min-height:100px; }
+	</style>
+	<link rel="stylesheet" href="frontend/dist/themes/default/style.min.css" />
+</head>
+<body>	
+	<script src="frontend/jquery.min.js"></script>
+	<script src="frontend/dist/jstree.min.js"></script>
+	
+	<script th:inline="javascript">
+		
+			
+	//////////////////------------------------------/////////////////////////-------------------------//////////////////		
+			function getUrlVars() {
+	    var vars = {};
+	    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+	        vars[key] = value;
+	    });
+	    return vars;
+	}
+
+			function getUrlParam(parameter, defaultvalue){
+	    var urlparameter = defaultvalue;
+	    if(window.location.href.indexOf(parameter) > -1){
+	        urlparameter = getUrlVars()[parameter];
+	        }
+	    return urlparameter;
+	}
+
+		
+	//alert("hi2");12-3-2020
+		var endpoint=getUrlParam('url','Empty');
+		//alert(endpoint);
+		
+	var dat=/*[[${treeproduct}]]*/ "TEST";
+ 	$.ajax({url:"browsermqtt", data:"source_id="+endpoint ,success: function(result){
+	//29-5 alert (result);
+    dat=result;	
+
+     var str=dat;
+    // alert(str);
+
+	$('#data2').jstree({
+	'core' : { 'data' :  eval(str) },
+	'contextmenu':{
+	'items':customMenu
+	},
+	'types': {
+        'root': {
+            'icon':  'tag/tree-icon.png'
+        },
+        'device': {
+            'icon': 'tag/tag_folder.png'
+        },
+        'element': {
+            'icon':  'tag/m_element.ico'
+        },
+        'para': {
+            'icon':  'tag/m_para.png'
+        }
+},
+    'plugins': ['contextmenu','unique','types','state']});
+    }}); 
+ 	
+ 	
+ 	 
+     function customMenu(node){ 
+			var items={ 
+			      "Subscribe": { 
+		            "label": "Subscribe", 
+		            "action": function (e, data) { 
+		    			var selectedNode= $('#data2').jstree(true).get_selected(true)[0]; 
+		 				var source=selectedNode.original.device_id; 
+		 				var topic_name=selectedNode.original.text;
+		 			
+		 				//alert('root...'+selectedNode.original.broadcast_ip); 
+		    				//alert("hi");12-3-2020
+		    			
+		    							$.ajax({
+											 type:'get',
+											 url:'subscribeMqtt',
+											 data:'source_id='+source+'&topic_name='+topic_name,
+						 					 success:function(response){}}); 
+		    					}
+		    
+		            }, 
+		                        "Unsubscribe": { 
+		                            "label": "Unsubscribe", 
+		                            "action": function (e, data) { 
+		                                   //alert('Node Unsubscribed !'); 
+		                     				var selectedNode1= $('#data2').jstree(true).get_selected(true)[0]; 
+			                 					var source1=selectedNode1.original.device_id; 
+		 				                        var topic_name1=selectedNode1.original.text;
+		                 				//alert(nodeid1);
+			 			     								$.ajax({
+		            										 		type:'get',
+		            										 		url:'unsubscribeMqtt',
+		            										 		 data:'source_id='+source1+'&topic_name='+topic_name1,
+		             				 					 			success:function(response){
+				 															//alert('Unsubscribe.......!');
+				
+		             											}
+		             				 					 		
+		         			 								}); 
+				
+		                            } 
+		                        }         } 
+		                        
+		                     //   alert(node.type);
+			if(node.type != "para") { 
+				items.Subscribe._disabled = true; 
+				items.Unsubscribe._disabled = true; 
+				//items.Startnode._disabled = true; 
+			} 
+			return items; 
+		}		
+     
+     	 
+
+	
+	/*]]>*/
+
+	</script> 
+    <div id="data2">dhjfgskdh</div>
+<form>
+<input type="hidden" id="txtText"><input type="hidden" id="txtId"></form>
+
+</body>
+</html>
