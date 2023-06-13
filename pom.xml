@@ -216,6 +216,9 @@
                 <configuration>
                     <jvmArguments>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5496</jvmArguments>
                     <wait>500</wait>
+			<layers>
+            			<enabled>true</enabled>
+        		</layers>
                     <maxAttempts>240</maxAttempts>
                 </configuration>
                 <executions>
